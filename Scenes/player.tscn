@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://dkur6cgh0p7mm"]
+
+[ext_resource type="Script" uid="uid://cnrbl5ww5egnn" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="Texture2D" uid="uid://caecwt0rrx3ko" path="res://icon.svg" id="2_cvnsp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2poj3"]
+size = Vector2(64, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f60y1"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="Gradient" id="Gradient_cvnsp"]
+offsets = PackedFloat32Array(0.078313254, 1)
+colors = PackedColorArray(0.5058292, 0.32682344, 0.6637203, 1, 0.22736958, 0.45129168, 0.45541197, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6t5aa"]
+gradient = SubResource("Gradient_cvnsp")
+height = 128
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_6t5aa"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_vgqql"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_fkybt"]
+width = 16
+height = 16
+noise = SubResource("FastNoiseLite_vgqql")
+color_ramp = SubResource("Gradient_6t5aa")
+
+[node name="Player" type="CharacterBody2D" unique_id=1337883315]
+script = ExtResource("1_v0iea")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1881230948]
+shape = SubResource("RectangleShape2D_2poj3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1887176213]
+sprite_frames = SubResource("SpriteFrames_f60y1")
+animation = &"idle"
+
+[node name="Placeholder" type="Sprite2D" parent="." unique_id=978445343]
+texture = SubResource("GradientTexture2D_6t5aa")
+
+[node name="Face" type="Sprite2D" parent="Placeholder" unique_id=1546459059]
+modulate = Color(1, 1, 1, 0.49019608)
+position = Vector2(4.7683716e-07, -32)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_cvnsp")
+
+[node name="Hand" type="Sprite2D" parent="Placeholder" unique_id=245903703]
+position = Vector2(34, 1)
+texture = SubResource("NoiseTexture2D_fkybt")
+
+[node name="DashTimer" type="Timer" parent="." unique_id=1756650783]
+wait_time = 0.15
+one_shot = true
+
+[node name="DashText" type="Label" parent="." unique_id=1327624581]
+offset_left = -31.0
+offset_top = -90.0
+offset_right = 9.0
+offset_bottom = -67.0
+text = "1.0"
+
+[node name="VectorText" type="Label" parent="." unique_id=1251242201]
+offset_left = -31.0
+offset_top = -112.0
+offset_right = 9.0
+offset_bottom = -89.0
+text = "Direction:"
