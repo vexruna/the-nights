@@ -1,9 +1,27 @@
 [gd_scene format=3 uid="uid://0du2lv17demy"]
 
 [ext_resource type="PackedScene" uid="uid://dkur6cgh0p7mm" path="res://Scenes/player.tscn" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://dje7cak11q1yq" path="res://Scripts/camera_2d.gd" id="2_qxrlw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ebmjs"]
 size = Vector2(1280, 32)
+
+[sub_resource type="Gradient" id="Gradient_qxrlw"]
+colors = PackedColorArray(0, 0, 0, 1, 0.5020489, 0.42267156, 0.8170729, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wrm1d"]
+noise_type = 3
+frequency = 0.0298
+domain_warp_enabled = true
+domain_warp_amplitude = 31.365
+domain_warp_frequency = 1.69
+domain_warp_fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3dryh"]
+width = 1280
+height = 32
+noise = SubResource("FastNoiseLite_wrm1d")
+color_ramp = SubResource("Gradient_qxrlw")
 
 [node name="Game" type="Node2D" unique_id=1963987925]
 
@@ -16,3 +34,11 @@ metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1100899210]
 shape = SubResource("RectangleShape2D_ebmjs")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground/CollisionShape2D" unique_id=484072795]
+texture = SubResource("NoiseTexture2D_3dryh")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1457849792]
+position = Vector2(423, 489)
+script = ExtResource("2_qxrlw")
