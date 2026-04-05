@@ -5,8 +5,10 @@ extends CharacterBody2D
 @export var FRICTION := 1920.0
 @export var JUMP_VELOCITY := -700.0
 @export var DASH_SPEED := 1200.0
+@export var DASH_SPEED_V := 900.0
 var DashToken = 1
-var DashLimit = 1
+var DashLimit = 20
+var topvelocity := Vector2(0.0, 0.0)
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor() and $DashTimer.is_stopped():
@@ -33,25 +35,38 @@ func _physics_process(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0, velocity_weight)
 
 	#Dash Indicator
-	$DashText.text = str($DashTimer.time_left).erase(3, 20)
 	if not $DashTimer.is_stopped():
-		$Placeholder.set_modulate(Color(0.129, 0.933, 0.0))
-	if $DashTimer.is_stopped() and not is_on_floor() and DashToken <= 0:
+		$Placeholder.set_modulate(Color("Green"))
+	if $DashTimer.is_stopped() and not $DashDelay.is_stopped():
+		$Placeholder.set_modulate(Color("Yellow"))
+	if $DashTimer.is_stopped() and $DashDelay.is_stopped() and not is_on_floor() and DashToken <= 0:
 		$Placeholder.set_modulate(Color("Red"))
-	if $DashTimer.is_stopped() and is_on_floor():
+	if $DashTimer.is_stopped() and $DashDelay.is_stopped() and is_on_floor() or $DashTimer.is_stopped() and $DashDelay.is_stopped() and DashToken > 0:
 		$Placeholder.set_modulate(Color("White"))
+		
 	#Direction Indicator
-	$VectorText.text = "Direction: " + str(direction)
+
+	if abs(velocity.x) > topvelocity.x:
+		topvelocity.x = velocity.x
+		$VectorText.text = "Top Velocity.x: " + str(topvelocity.x)
+	if abs(velocity.y) > topvelocity.y:
+		topvelocity.y = velocity.y
+		$VectorText2.text = "Top Velocity.y: " + str(topvelocity.y)
 
 # Dash mechanic WIP
 	if is_on_floor():
 		DashToken = DashLimit
-	if Input.is_action_just_pressed("action_dash") and $DashTimer.is_stopped() and DashToken > 0:
-		velocity = Vector2(0, 0)
+	if Input.is_action_just_pressed("action_dash") and $DashTimer.is_stopped() and $DashDelay.is_stopped() and DashToken > 0:
+		velocity = Vector2.ZERO
 		$DashTimer.start()
+		$DashDelay.start()
 		DashToken -= 1
 		if direction:
+			if direction.y and not direction.x:
+				velocity = direction.normalized() * DASH_SPEED_V
+				return
 			velocity = direction.normalized() * DASH_SPEED
+		
 		else:
 			velocity.x += DASH_SPEED * $Placeholder.scale.x
 
