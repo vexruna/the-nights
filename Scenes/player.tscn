@@ -4,15 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://caecwt0rrx3ko" path="res://icon.svg" id="2_cvnsp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2poj3"]
-size = Vector2(64, 128)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_f60y1"]
-animations = [{
-"frames": [],
-"loop": true,
-"name": &"idle",
-"speed": 5.0
-}]
+size = Vector2(64, 96)
 
 [sub_resource type="Gradient" id="Gradient_cvnsp"]
 offsets = PackedFloat32Array(0.078313254, 1)
@@ -24,6 +16,7 @@ height = 128
 fill_to = Vector2(0, 1)
 
 [sub_resource type="Gradient" id="Gradient_6t5aa"]
+colors = PackedColorArray(0.5058824, 0.3254902, 0.6627451, 1, 0.22745098, 0.4509804, 0.45490196, 1)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vgqql"]
 
@@ -34,14 +27,12 @@ noise = SubResource("FastNoiseLite_vgqql")
 color_ramp = SubResource("Gradient_6t5aa")
 
 [node name="Player" type="CharacterBody2D" unique_id=1337883315]
+collision_mask = 6
 script = ExtResource("1_v0iea")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1881230948]
+position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_2poj3")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1887176213]
-sprite_frames = SubResource("SpriteFrames_f60y1")
-animation = &"idle"
 
 [node name="Placeholder" type="Sprite2D" parent="." unique_id=978445343]
 texture = SubResource("GradientTexture2D_6t5aa")

@@ -23,14 +23,47 @@ height = 32
 noise = SubResource("FastNoiseLite_wrm1d")
 color_ramp = SubResource("Gradient_qxrlw")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wrm1d"]
+size = Vector2(720, 32)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i6g32"]
+width = 720
+height = 32
+noise = SubResource("FastNoiseLite_wrm1d")
+color_ramp = SubResource("Gradient_qxrlw")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qxrlw"]
+size = Vector2(32, 688)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wrm1d"]
+width = 32
+height = 688
+noise = SubResource("FastNoiseLite_wrm1d")
+color_ramp = SubResource("Gradient_qxrlw")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3dryh"]
+size = Vector2(32, 400)
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_wowpa"]
+width = 32
+height = 400
+noise = SubResource("FastNoiseLite_wrm1d")
+color_ramp = SubResource("Gradient_qxrlw")
+
 [node name="Game" type="Node2D" unique_id=1963987925]
 
 [node name="Player" parent="." unique_id=1337883315 instance=ExtResource("1_ebmjs")]
 position = Vector2(423, 489)
 
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1457849792]
+position = Vector2(0, -128)
+position_smoothing_enabled = true
+position_smoothing_speed = 15.0
+script = ExtResource("2_qxrlw")
+
 [node name="Ground" type="StaticBody2D" parent="." unique_id=547714823]
 position = Vector2(640, 704)
-metadata/_edit_group_ = true
+collision_layer = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground" unique_id=1100899210]
 shape = SubResource("RectangleShape2D_ebmjs")
@@ -39,6 +72,45 @@ metadata/_edit_group_ = true
 [node name="Sprite2D" type="Sprite2D" parent="Ground/CollisionShape2D" unique_id=484072795]
 texture = SubResource("NoiseTexture2D_3dryh")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1457849792]
-position = Vector2(423, 489)
-script = ExtResource("2_qxrlw")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Ground" unique_id=1728422053]
+position = Vector2(1280, 0)
+shape = SubResource("RectangleShape2D_ebmjs")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground/CollisionShape2D2" unique_id=482711555]
+texture = SubResource("NoiseTexture2D_3dryh")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Ground" unique_id=653510154]
+position = Vector2(840, -568)
+shape = SubResource("RectangleShape2D_wrm1d")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground/CollisionShape2D3" unique_id=1421750414]
+texture = SubResource("NoiseTexture2D_i6g32")
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=358752435]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=2031685087]
+position = Vector2(16, 344)
+shape = SubResource("RectangleShape2D_qxrlw")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/CollisionShape2D" unique_id=1323029635]
+texture = SubResource("NoiseTexture2D_wrm1d")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Walls" unique_id=929045669]
+position = Vector2(816, 120)
+shape = SubResource("RectangleShape2D_3dryh")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/CollisionShape2D2" unique_id=2072818217]
+texture = SubResource("NoiseTexture2D_wowpa")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Walls" unique_id=1071512133]
+position = Vector2(1104, 320)
+shape = SubResource("RectangleShape2D_3dryh")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Walls/CollisionShape2D3" unique_id=22738401]
+texture = SubResource("NoiseTexture2D_wowpa")

@@ -1,13 +1,14 @@
 extends CharacterBody2D
 
-@export var SPEED := 500.0
-@export var ACCELERATION := 1920.0
-@export var FRICTION := 1920.0
-@export var JUMP_VELOCITY := -700.0
-@export var DASH_SPEED := 1200.0
-@export var DASH_SPEED_V := 900.0
+@export var SPEED := 600.0
+@export var ACCELERATION := 1500.0
+@export var FRICTION := 3000.0
+@export var JUMP_VELOCITY := -800.0
+@export var TERMINAL_VELOCITY := 5000.0
+@export var DASH_SPEED := Vector2(1200, 800)
+
 var DashToken = 1
-var DashLimit = 2
+var DashLimit = 1
 var topvelocity := Vector2(0.0, 0.0)
 
 func _physics_process(delta):
@@ -17,18 +18,29 @@ func _physics_process(delta):
 	move_and_slide()
 
 func PlayerMovement(delta):
-	# Add the gravity.
-	if not is_on_floor() and $DashTimer.is_stopped():
-		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed("action_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Vector2()
 	direction = Input.get_vector("action_left", "action_right","action_up", "action_down")
 	var velocity_weight: float = (ACCELERATION if direction else FRICTION) * delta
+	
+	# Add the gravity.
+	if not is_on_floor() and $DashTimer.is_stopped():
+		if is_on_wall_only() and velocity.y >= 0:
+			velocity += get_gravity() * delta
+			if velocity.y > 200:
+				velocity.y = 200
+		else:
+			velocity += get_gravity() * delta
+			if velocity.y > TERMINAL_VELOCITY:
+				velocity.y = TERMINAL_VELOCITY
+			
+
+	# Handle jump.
+	if Input.is_action_just_pressed("action_jump") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("action_jump") and is_on_wall_only():
+		velocity.x = JUMP_VELOCITY * 0.8 * $Placeholder.scale.x
+		velocity.y = JUMP_VELOCITY
 
 	#Basic movement
 	if direction.x and $DashTimer.is_stopped():
@@ -53,12 +65,9 @@ func PlayerMovement(delta):
 		$DashDelay.start()
 		DashToken -= 1
 		if direction:
-			if direction.y and not direction.x:
-				velocity = direction.normalized() * DASH_SPEED_V
-				return
 			velocity = direction.normalized() * DASH_SPEED
 		else:
-			velocity.x += DASH_SPEED * $Placeholder.scale.x
+			velocity.x = DASH_SPEED.x * $Placeholder.scale.x
 
 func DashIndicator():
 	if not $DashTimer.is_stopped():
