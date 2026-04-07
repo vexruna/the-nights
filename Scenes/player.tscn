@@ -48,21 +48,16 @@ position = Vector2(34, 1)
 texture = SubResource("NoiseTexture2D_fkybt")
 
 [node name="DashTimer" type="Timer" parent="." unique_id=1756650783]
+process_callback = 0
 wait_time = 0.1
 one_shot = true
 
 [node name="DashDelay" type="Timer" parent="." unique_id=110126033]
-wait_time = 0.3
+process_callback = 0
+wait_time = 0.2
 one_shot = true
 
-[node name="VectorText" type="Label" parent="." unique_id=1251242201]
-offset_left = -154.0
-offset_top = -113.0
-offset_right = -56.0
-offset_bottom = -79.0
-text = "Velocity:"
-
-[node name="VectorText2" type="Label" parent="." unique_id=1942769261]
+[node name="Debug" type="Label" parent="." unique_id=1251242201]
 offset_left = -154.0
 offset_top = -150.0
 offset_right = -56.0
@@ -70,5 +65,6 @@ offset_bottom = -116.0
 text = "Velocity:"
 
 [node name="KoyoteTimer" type="Timer" parent="." unique_id=715569963]
+process_callback = 0
 wait_time = 0.1
 one_shot = true
