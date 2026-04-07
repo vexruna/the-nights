@@ -10,7 +10,7 @@ extends CharacterBody2D
 var DashToken = 1
 var DashLimit = 1
 var topvelocity := Vector2(0.0, 0.0)
-
+var koyote: bool = false
 func _physics_process(delta):
 	PlayerMovement(delta)
 	DashIndicator()
@@ -24,7 +24,13 @@ func PlayerMovement(delta):
 	var velocity_weight: float = (ACCELERATION if direction else FRICTION) * delta
 	
 	# Add the gravity.
-	if not is_on_floor() and $DashTimer.is_stopped():
+	if is_on_floor() and koyote: #or is_on_wall_only() and koyote:
+		$KoyoteTimer.stop()
+		koyote = false
+	if not is_on_floor() and not koyote or not is_on_wall_only() and not koyote:
+		$KoyoteTimer.start()
+		koyote = true
+	if not is_on_floor() and $DashTimer.is_stopped() and $KoyoteTimer.is_stopped():
 		if is_on_wall_only() and velocity.y >= 0:
 			velocity += get_gravity() * delta
 			if velocity.y > 200:
@@ -36,11 +42,21 @@ func PlayerMovement(delta):
 			
 
 	# Handle jump.
-	if Input.is_action_just_pressed("action_jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-	if Input.is_action_just_pressed("action_jump") and is_on_wall_only():
-		velocity.x = JUMP_VELOCITY * 0.8 * $Placeholder.scale.x
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_pressed("action_jump") or Input.is_action_pressed("action_jump") and $KoyoteTimer.time_left > 0:
+		$KoyoteTimer.stop()
+		if is_on_floor():
+			velocity.y = JUMP_VELOCITY
+		if is_on_wall_only():
+			velocity.x = JUMP_VELOCITY * 0.8 * $Placeholder.scale.x
+			velocity.y = JUMP_VELOCITY
+
+	#if Input.is_action_just_pressed("action_jump") and is_on_floor() or Input.is_action_just_pressed("action_jump") and $KoyoteTimer.time_left > 0:
+	#	koyote = false
+	#	$KoyoteTimer.stop()
+	#	velocity.y = JUMP_VELOCITY
+	#if Input.is_action_just_pressed("action_jump") and is_on_wall_only() and $KoyoteTimer.time_left > 0:
+	#	velocity.x = JUMP_VELOCITY * 0.8 * $Placeholder.scale.x
+	#	velocity.y = JUMP_VELOCITY
 
 	#Basic movement
 	if direction.x and $DashTimer.is_stopped():
