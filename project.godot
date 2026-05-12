@@ -15,8 +15,9 @@ config/description="Reaction Combat Platformer about Night Terrors."
 config/version="Prototype"
 run/main_scene="uid://0du2lv17demy"
 config/features=PackedStringArray("4.6", "Mobile")
-boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="/home/crescent/Pictures/uglybastard.png"
 config/icon="res://icon.svg"
+boot_splash/minimum_display_time=1000
 
 [display]
 
@@ -89,6 +90,7 @@ action_jump={
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Ground"
 2d_physics/layer_3="Walls"
+2d_physics/layer_4="Spike"
 
 [physics]
 
@@ -99,4 +101,4 @@ action_jump={
 
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
-environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+environment/defaults/default_clear_color=Color(0, 0.0938024, 0.12599222, 1)

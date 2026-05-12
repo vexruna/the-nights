@@ -11,6 +11,8 @@ var direction := Vector2()
 var dash_token = 1
 var dash_limit = 1
 var topvelocity := Vector2(0.0, 0.0)
+var wall : Vector2
+var detection: Vector2
 enum States
 {
 	NEUTRAL,
@@ -56,27 +58,15 @@ func state_neutral(delta): # Stand, walk and enjoy laws of the universe.
 	walk(delta)
 	gravity(delta)
 	koyote()
+	jump()
+	dash()
 	
-	if is_on_floor():
-		_last_touched_surface = Surface.GROUND
-		$KoyoteTimer.start()
-		dash_token = dash_limit # This resets you ability to dash.
-	if is_on_wall_only():
-		_last_touched_surface = Surface.WALL
-		$WallJumpTimer.start()
-	
-	if Input.is_action_just_pressed("action_jump"):
-		jump(_last_touched_surface)
-	if Input.is_action_just_pressed("action_dash"):
-		dash()
-
 func state_fall(delta): # You're now free falling.
 	walk(delta)
 	gravity(delta)
-	if is_on_floor() or is_on_wall_only():
+	if is_on_floor() or is_on_wall_only() or $WallDetector.is_colliding():
 		set_state(States.NEUTRAL)
-	if Input.is_action_just_pressed("action_dash"):
-		dash()
+	dash()
 
 func state_dash(to: Vector2): # Defy gravity, move fast and avoid damage.
 	if to:
@@ -100,43 +90,60 @@ func walk(delta):
 		# Smooth accel/decel movement.
 	if direction.x:
 		velocity.x = move_toward(velocity.x, roundf(direction.x) * SPEED, velocity_weight)
+		$WallDetector.scale.x = round(direction.x)
 	else:
 		velocity.x = move_toward(velocity.x, 0, velocity_weight)
 
-func jump(from: Surface): # They see me jumpin', they hatin'
-	if $KoyoteTimer.time_left > 0 or $WallJumpTimer.time_left > 0:
-		match from:
-			Surface.GROUND:
-				velocity.y = FALL_VELOCITY
-			Surface.WALL:
-				var wall := get_wall_normal()
-				velocity.y = FALL_VELOCITY
-				velocity.x = FALL_VELOCITY * -wall.x
-		$KoyoteTimer.stop()
-		$WallJumpTimer.stop()
-		set_state(States.FALL)
+func jump(): # They see me jumpin', they hatin'
+
+	if is_on_floor():
+		_last_touched_surface = Surface.GROUND
+	if $WallDetector.is_colliding() and not is_on_floor():
+		_last_touched_surface = Surface.WALL
+		wall = $WallDetector.get_collision_normal(0)
+		$WallJumpTimer.start()
+	if Input.is_action_just_pressed("action_jump"):
+			match _last_touched_surface:
+				Surface.GROUND:
+					if $KoyoteTimer.time_left > 0:
+						velocity.y = FALL_VELOCITY
+						$KoyoteTimer.stop()
+						$WallJumpTimer.stop()
+						set_state(States.FALL)
+				Surface.WALL:
+					if $WallJumpTimer.time_left > 0:
+						velocity.y = FALL_VELOCITY
+						velocity.x = FALL_VELOCITY * -wall.x
+						$KoyoteTimer.stop()
+						$WallJumpTimer.stop()
+						set_state(States.FALL)
 
 func dash(): # Gravity need not apply.
-	if $DashDelay.is_stopped() and dash_token > 0:
-		dash_token -= 1
-		$DashTimer.start()
-		$DashDelay.start()
-		set_state(States.DASH)
+	if is_on_floor():
+		dash_token = dash_limit # This resets you ability to dash.
+	if Input.is_action_just_pressed("action_dash"):
+		if $DashDelay.is_stopped() and dash_token > 0:
+			dash_token -= 1
+			$DashTimer.start()
+			$DashDelay.start()
+			set_state(States.DASH)
 
 func gravity(delta): # Applies global world gravity to the player.
-	if is_on_floor():
-		air_drag(false)
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-		air_drag(true)
-		if is_on_wall_only() and velocity.y > 400 and direction.y < 1:
-			velocity.y = 400
-		if velocity.y > TERMINAL_VELOCITY:
-			velocity.y = TERMINAL_VELOCITY
+	#if Input.is_action_just_pressed("action_down"):
+		if is_on_floor():
+			air_drag(false)
+		if not is_on_floor():
+			velocity += get_gravity() * delta
+			air_drag(true)
+			if $WallDetector.is_colliding():
+				if velocity.y > 400 and direction.y < 1:
+					velocity.y = 400
+			if velocity.y > TERMINAL_VELOCITY:
+				velocity.y = TERMINAL_VELOCITY
 
 func koyote(): # I can fly now.
 	if is_on_floor():
-		return
+		$KoyoteTimer.start()
 	if $KoyoteTimer.time_left > 0:
 		if velocity.y > 0:
 			velocity.y = 0
@@ -178,4 +185,5 @@ func debug(): # Useful or interesting info.
 	$Debug.text = \
 	"Current State: "+str(_state) + "\n" + \
 	"Top Velocity.x: "+str(topvelocity.x) + "\n" + \
-	"Top Velocity.y: "+str(topvelocity.y)
+	"Top Velocity.y: "+str(topvelocity.y) + "\n" + \
+	"WallDetector: " + str(wall)
