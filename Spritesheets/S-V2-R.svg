@@ -1,0 +1,32 @@
+<svg width="512" height="256" viewBox="0 0 512 256"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<!--
+Tile Classification S-V2-R, created by Tileset Creator.
+https://www.boristhebrave.com/permanent/23/03/tileset-creator/?autotile=Corner&cellType=Square&rotation=Rotate&terrainCount=2&overlay=False&skipCornerTiles=False&drawStyle=Bent#
+-->
+<g transform="matrix(1 -0 -0 1 64 64)">
+<path d="M32,32L32,-32L-32,-32L-32,32Z" style="stroke:black;fill:white" />
+</g>
+<g transform="matrix(1 -0 -0 1 192 64)">
+<path d="M32,32L32,-32L-32,-32L-32,32Z" style="stroke:black;fill:white" />
+<path d="M0,32L32,32L32,-0L0,0L0,32" style="stroke:black;fill:red" />
+</g>
+<g transform="matrix(1 -0 -0 1 320 64)">
+<path d="M32,32L32,-32L-32,-32L-32,32Z" style="stroke:black;fill:white" />
+<path d="M0,32L32,32L32,-32L0,-32L0,32L0,32" style="stroke:black;fill:red" />
+</g>
+<g transform="matrix(1 -0 -0 1 448 64)">
+<path d="M32,32L32,-32L-32,-32L-32,32Z" style="stroke:black;fill:white" />
+<path d="M0,-32L-32,-32L-32,-0L0,0L0,-32" style="stroke:black;fill:red" />
+<path d="M0,32L32,32L32,-0L0,0L0,32" style="stroke:black;fill:red" />
+</g>
+<g transform="matrix(1 -0 -0 1 64 192)">
+<path d="M32,32L32,-32L-32,-32L-32,32Z" style="stroke:black;fill:white" />
+<path d="M0,32L32,32L32,-32L-32,-32L-32,-0L0,0L0,32" style="stroke:black;fill:red" />
+</g>
+<g transform="matrix(1 -0 -0 1 192 192)">
+<path d="M32,32L32,-32L-32,-32L-32,32Z" style="stroke:black;fill:white" />
+<path d="M0,32L32,32L32,-32L-32,-32L-32,32L0,32" style="stroke:black;fill:red" />
+</g>
+<g transform="matrix(1 0 0 1 0 0)">
+</g></svg>

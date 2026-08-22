@@ -40,7 +40,7 @@ shape = SubResource("RectangleShape2D_2poj3")
 [node name="WallDetector" type="ShapeCast2D" parent="." unique_id=90425717]
 position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_cvnsp")
-target_position = Vector2(1, 0)
+target_position = Vector2(20, 0)
 collision_mask = 2
 
 [node name="Placeholder" type="Sprite2D" parent="." unique_id=978445343]
@@ -83,4 +83,5 @@ wait_time = 0.1
 one_shot = true
 
 [node name="WallJumpTimer" type="Timer" parent="." unique_id=1313118905]
+wait_time = 0.1
 one_shot = true

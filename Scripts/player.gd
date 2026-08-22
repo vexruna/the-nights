@@ -182,8 +182,12 @@ func debug(): # Useful or interesting info.
 		topvelocity.x = roundf(abs(velocity.x))
 	if abs(velocity.y) > abs(topvelocity.y):
 		topvelocity.y = roundf(abs(velocity.y))
+	var debug_state: String
+	for key in States:
+		if States[key] == _state:
+			debug_state = key
 	$Debug.text = \
-	"Current State: "+str(_state) + "\n" + \
+	"Current State: "+str(debug_state) + "\n" + \
 	"Top Velocity.x: "+str(topvelocity.x) + "\n" + \
 	"Top Velocity.y: "+str(topvelocity.y) + "\n" + \
 	"WallDetector: " + str(wall)
