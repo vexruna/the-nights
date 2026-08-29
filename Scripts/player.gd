@@ -8,8 +8,8 @@ extends CharacterBody2D
 @export var DASH_SPEED := Vector2(1200, 800)
 
 var direction := Vector2()
-var dash_token = 1
-var dash_limit = 1
+@export var dash_token = 1
+@export var dash_limit = 1
 var topvelocity := Vector2(0.0, 0.0)
 var wall : Vector2
 var detection: Vector2

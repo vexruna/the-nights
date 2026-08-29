@@ -32,6 +32,7 @@ color_ramp = SubResource("Gradient_6t5aa")
 [node name="Player" type="CharacterBody2D" unique_id=1337883315]
 collision_mask = 6
 script = ExtResource("1_v0iea")
+dash_limit = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1881230948]
 position = Vector2(0, 16)
